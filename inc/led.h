@@ -1,6 +1,7 @@
 #ifndef _LED_H
 #define _LED_H
 
+#define Ollie
 
 #define LED_BLUE_Pin GPIO_PIN_1
 #define LED_BLUE_Port GPIOB

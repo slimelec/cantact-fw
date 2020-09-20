@@ -4,18 +4,19 @@
 
 #include "stm32f0xx_hal.h"
 #include "led.h"
-
-
+#ifndef Ollie
+#ifndef Ollie
 // Private variables
 static volatile uint32_t led_blue_laston = 0;
 static volatile uint32_t led_green_laston = 0;
 static uint32_t led_blue_lastoff = 0;
 static uint32_t led_green_lastoff = 0;
-
+#endif
 
 // Initialize LED GPIOs
 void led_init()
 {
+#ifndef Ollie
     __HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
@@ -25,13 +26,15 @@ void led_init()
     GPIO_InitStruct.Alternate = 0;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    HAL_GPIO_WritePin(LED_GREEN, 1); 
+    HAL_GPIO_WritePin(LED_GREEN, 1);
+#endif
 }
 
 
 // Turn green LED on
 void led_green_on(void)
 {
+#ifndef Ollie
 	// Make sure the LED has been off for at least LED_DURATION before turning on again
 	// This prevents a solid status LED on a busy canbus
 	if(led_green_laston == 0 && HAL_GetTick() - led_green_lastoff > LED_DURATION)
@@ -40,19 +43,23 @@ void led_green_on(void)
 		HAL_GPIO_WritePin(LED_GREEN, 0);
 		led_green_laston = HAL_GetTick();
 	}
+#endif
 }
 
 
 // Turn green LED on
 void led_green_off(void)
 {
+#ifndef Ollie
 	HAL_GPIO_WritePin(LED_GREEN, 0);
+#endif
 }
 
 
 // Blink blue LED (blocking)
 void led_blue_blink(uint8_t numblinks)
 {
+#ifndef Ollie
 	uint8_t i;
 	for(i=0; i<numblinks; i++)
 	{
@@ -61,12 +68,14 @@ void led_blue_blink(uint8_t numblinks)
 		HAL_GPIO_WritePin(LED_BLUE, 0);
 		HAL_Delay(100);
 	}
+#endif
 }
 
 
 // Attempt to turn on status LED
 void led_blue_on(void)
 {
+#ifndef Ollie
 	// Make sure the LED has been off for at least LED_DURATION before turning on again
 	// This prevents a solid status LED on a busy canbus
 	if(led_blue_laston == 0 && HAL_GetTick() - led_blue_lastoff > LED_DURATION)
@@ -74,12 +83,14 @@ void led_blue_on(void)
 		HAL_GPIO_WritePin(LED_BLUE, 1);
 		led_blue_laston = HAL_GetTick();
 	}
+#endif
 }
 
 
 // Process time-based LED events
 void led_process(void)
 {
+#ifndef Ollie
 	// If LED has been on for long enough, turn it off
 	if(led_blue_laston > 0 && HAL_GetTick() - led_blue_laston > LED_DURATION)
 	{
@@ -96,5 +107,6 @@ void led_process(void)
 		led_green_laston = 0;
 		led_green_lastoff = HAL_GetTick();
 	}
+#endif
 }
-
+#endif

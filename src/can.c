@@ -77,8 +77,9 @@ void can_enable(void)
 
         HAL_CAN_Start(&can_handle);
         bus_state = ON_BUS;
-
+		#ifndef Ollie
         led_blue_on();
+		#endif
     }
 }
 
@@ -91,8 +92,9 @@ void can_disable(void)
         // Do a bxCAN reset (set RESET bit to 1)
     	can_handle.Instance->MCR |= CAN_MCR_RESET;
         bus_state = OFF_BUS;
-
+#ifndef Ollie
         led_green_on();
+#endif
     }
 }
 
@@ -136,8 +138,9 @@ void can_set_bitrate(enum can_bitrate bitrate)
             prescaler = 6;
             break;
     }
-
+#ifndef Ollie
     led_green_on();
+#endif
 }
 
 
@@ -155,8 +158,9 @@ void can_set_silent(uint8_t silent)
     } else {
     	can_handle.Init.Mode = CAN_MODE_NORMAL;
     }
-
+#ifndef Ollie
     led_green_on();
+#endif
 }
 
 
@@ -174,8 +178,9 @@ void can_set_autoretransmit(uint8_t autoretransmit)
     } else {
         can_nart = ENABLE;
     }
-
+#ifndef Ollie
     led_green_on();
+#endif
 }
 
 
@@ -187,8 +192,9 @@ uint32_t can_tx(CAN_TxHeaderTypeDef *tx_msg_header, uint8_t* tx_msg_data)
     // Transmit can frame
     uint32_t mailbox_txed = 0;
     status = HAL_CAN_AddTxMessage(&can_handle, tx_msg_header, tx_msg_data, &mailbox_txed);
-
+#ifndef Ollie
     led_green_on();
+#endif
 
     return status;
 }
@@ -199,8 +205,10 @@ uint32_t can_rx(CAN_RxHeaderTypeDef *rx_msg_header, uint8_t* rx_msg_data)
 {
     uint32_t status;
     status = HAL_CAN_GetRxMessage(&can_handle, CAN_RX_FIFO0, rx_msg_header, rx_msg_data);
-
+#ifndef Ollie
 	led_blue_on();
+#endif
+
     return status;
 }
 
